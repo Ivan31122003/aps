@@ -1,26 +1,29 @@
 package org.example;
 
 public class Request {
-    private static Integer idCounter = 1;
     private final Integer id;
     private final Integer sourceId;
-    private final Integer executingTime;
+    private final Double executingTime;
+    private final Double time;
 
-    public Request(Integer sourceId) {
-        this.id = idCounter++;
+    public Request(Integer sourceId, Integer requestId, Double executingTime, Double time) {
         this.sourceId = sourceId;
-        this.executingTime = 3500;
+        this.id = requestId;
+        this.executingTime = executingTime;
+        this.time = time;
+    }
+
+    public Integer getSourceId() {
+        return sourceId;
     }
 
     public Integer getId() {
         return id;
     }
 
-    public Integer sourceId() {
-        return sourceId;
-    }
-
-    public Integer getExecutingTime() {
+    public Double getExecutingTime() {
         return executingTime;
     }
+
+    public Double getTime() { return time; }
 }

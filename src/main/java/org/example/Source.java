@@ -4,19 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Source {
-    private 
-    private final Integer delayForStart;
-    private final Integer delayTime;
+    private static Integer idCounter = 1;
     private final Integer id;
-    private Integer counter = 0;
+    private Integer requestId = 1;
     private List<Request> requests;
 
-    public Source(Integer delayForStart, Integer delayTime, Integer numberOfRequests) {
-        this.delayForStart = delayForStart;
-        this.delayTime = delayTime;
+    public Source(Double delayForStart, Double delayTime, Integer requestsNumber, Double executingTime) {
+        id = idCounter++;
         requests = new ArrayList<>();
-        for (int i = 0; i < numberOfRequests; ++i) {
-            requests.add(new Request(delayForStart + i * delayTime));
+        for(int i = 0; i < requestsNumber; ++i) {
+             requests.add(new Request(id, requestId++, executingTime, delayForStart + delayTime * i));
         }
+    }
+
+    public List<Request> getRequests() {
+        return requests;
     }
 }

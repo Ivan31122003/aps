@@ -1,14 +1,21 @@
 package org.example;
 
-public class Calendar {
-    private final Long startTime;
-    private List<MyEvent> events;
+import java.util.ArrayList;
+import java.util.List;
 
-    public Calendar(Long startTime) {
-        this.startTime = startTime;
+public class Calendar {
+    private List<Item> items;
+    private MyProcess process;
+
+    public Calendar() {
+        items = new ArrayList<>();
     }
 
-    public Long getStartTime() {
-        return startTime;
+    public void addItem(Sources sources, Devices devices) {
+        items.add(new Item(sources, devices));
+    }
+
+    public void start() {
+
     }
 }
