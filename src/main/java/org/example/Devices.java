@@ -27,9 +27,11 @@ public class Devices {
         return false;
     }
 
-    public void put(Request request) {
+    public Device put(Request request) {
+        Integer lastIndex = 0;
         for (int i = 0; i < devicesNumber; ++i) {
             if (devices.get(index).getIsIdle()) {
+                lastIndex = index;
                 devices.get(index++).serviceRequest(request);
                 if (index.equals(devicesNumber)) {
                     index = 0;
@@ -42,6 +44,7 @@ public class Devices {
                 }
             }
         }
+        return devices.get(lastIndex);
     }
 
     public void checkState(Double time) {

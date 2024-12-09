@@ -12,7 +12,10 @@ public class Buffer {
     private final Integer capacity;
 
     public Buffer(Integer capacity) {
-        requests = new ArrayList<>(capacity);
+        requests = new ArrayList<>();
+        for (int i = 0; i < capacity; ++i) {
+            requests.add(new Request(1, 1, 1d, 1d));
+        }
         indexPut = 0;
         indexTake = 0;
         size = 0;
@@ -29,11 +32,10 @@ public class Buffer {
             return false;
         }
         size++;
-        indexPut++;
+        requests.set(indexPut++, request);
         if (indexPut.equals(capacity)) {
             indexPut = 0;
         }
-        requests.add(indexPut, request);
         isEmpty = false;
         return true;
     }

@@ -3,6 +3,8 @@ package org.example;
 public class Device {
     private static Integer idCounter = 1;
     private Integer id;
+    private Integer sourceId;
+    private Integer requestId;
     private Boolean isIdle = true;
     private Double releaseTime;
 
@@ -14,8 +16,26 @@ public class Device {
         return isIdle;
     }
 
+    public Integer getId() {
+        return id;
+    }
+
+    public Integer getSourceId() {
+        return sourceId;
+    }
+
+    public Integer getRequestId() {
+        return requestId;
+    }
+
+    public Double getReleaseTime() {
+        return releaseTime;
+    }
+
     public void serviceRequest(Request request) {
         isIdle = false;
+        sourceId = request.getSourceId();
+        requestId = request.getId();
         releaseTime = request.getTime() + request.getExecutingTime();
     }
 
@@ -28,5 +48,10 @@ public class Device {
         if (!isIdle && time > releaseTime) {
             isIdle = true;
         }
+    }
+
+    public void printDevice() {
+        isIdle = true;
+        System.out.println(id + "    " + sourceId + "    " + requestId + "    " + releaseTime);
     }
 }
