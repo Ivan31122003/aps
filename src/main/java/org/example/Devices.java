@@ -52,4 +52,11 @@ public class Devices {
             device.checkTime(time);
         }
     }
+
+    public void printDevices() {
+        System.out.println("Прибор    Время    Статус    Кол-во заявок    Текущая заявка");
+        for (Device device : devices) {
+            System.out.println("   " + device.getId() + "      " + (!device.getIsIdle() ? device.getReleaseTime() : "---") + "     " + device.getIsIdle() + "            " + device.getProccecedRequsets() + "                " + (device.getSourceId() != null ? device.getSourceId() : "-") + " " + (device.getRequestId() != null ? device.getRequestId() : "-"));
+        }
+    }
 }

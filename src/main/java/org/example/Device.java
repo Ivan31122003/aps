@@ -7,6 +7,7 @@ public class Device {
     private Integer requestId;
     private Boolean isIdle = true;
     private Double releaseTime;
+    private Integer proccecedRequsets = 0;
 
     public Device() {
         this.id = idCounter++;
@@ -36,7 +37,7 @@ public class Device {
         isIdle = false;
         sourceId = request.getSourceId();
         requestId = request.getId();
-        releaseTime = request.getTime() + request.getExecutingTime();
+        releaseTime = (double) Math.round((request.getTime() + request.getExecutingTime()) * 10000.0) / 10000.0;
     }
 
     public void serviceBuffer(Request request) {
@@ -52,6 +53,15 @@ public class Device {
 
     public void printDevice() {
         isIdle = true;
-        System.out.println(id + "    " + sourceId + "    " + requestId + "    " + releaseTime);
+        ++proccecedRequsets;
+        System.out.println("Прибор: " + id);
+        System.out.println("Заявка: " + sourceId + " " + requestId);
+        System.out.println("Время: " + releaseTime);
+        sourceId = null;
+        requestId = null;
+    }
+
+    public Integer getProccecedRequsets() {
+        return proccecedRequsets;
     }
 }

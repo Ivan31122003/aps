@@ -12,6 +12,7 @@ public class MyProcess {
     private final Buffer buffer;
     private final Integer requestsNumber;
     private List<Request> requests;
+    private Boolean stepByStep = false;
 
     public MyProcess(Integer sourcesNumber, Integer bufferCapacity, Integer devicesNumber, Double sourcesStartDelay, Double sourcesInterval, Integer requestsNumber, Double requestTime) {
         this.requestsNumber = requestsNumber;
@@ -29,41 +30,85 @@ public class MyProcess {
         calendar = new Calendar();
     }
 
+    public void setStepByStep() {
+        this.stepByStep = true;
+    }
+
     public void start() {
         for (int i = 0; i < requestsNumber; ++i) {
-            if (calendar.isItem()) {
+            if(stepByStep) {
+                try
+                {
+                    System.in.read();
+                }
+                catch(Exception e)
+                {}
+            }
+            if (calendar.isItem() && calendar.getDevice().getReleaseTime() <= requests.get(i).getTime()) {
                 Device device = calendar.getDevice();
-                if (device.getReleaseTime() < requests.get(i).getTime()) {
-                    calendar.incrementIndex();
-                    device.printDevice();
-//                    --i;
-                    if (!buffer.getIsEmpty()) {
-                        Request request = buffer.take();
-                        request.setTime(device.getReleaseTime());
-                        devices.put(request);
-                        calendar.addItem(device);
+                System.out.println("Освободился прибор:");
+                calendar.incrementIndex();
+                device.printDevice();
+                sources.printSourcesState();
+                devices.printDevices();
+                buffer.printState();
+                --i;
+                if (!buffer.getIsEmpty()) {
+                    Request request = buffer.take();
+                    request.setTime(device.getReleaseTime());
+                    devices.put(request);
+                    calendar.addItem(device);
+                }
+            }
+            else {
+                if (devices.isDeviceIdle()) {
+                    System.out.println("Поступила заявка:");
+                    requests.get(i).printRequest(true, buffer.getIsEmpty());
+                    sources.setSourceState(requests.get(i));
+                    sources.printSourcesState();
+                    devices.printDevices();
+                    Device device1 = devices.put(requests.get(i));
+                    calendar.addItem(device1);
+                    buffer.printState();
+                } else {
+                    Boolean isExistsPlaceInBuffer = buffer.isExistsPlace();
+                    if (!buffer.isExistsPlace()) {
+                        System.out.println("Поступила заявка (отказ):");
+                        requests.get(i).setIsRejected();
+                        requests.get(i).printRequest(false, isExistsPlaceInBuffer);
+                        sources.setSourceState(requests.get(i));
+                        sources.printSourcesState();
+                        devices.printDevices();
+                        buffer.printState();
+                    } else {
+                        System.out.println("Поступила заявка:");
+                        requests.get(i).printRequest(false, isExistsPlaceInBuffer);
+                        sources.setSourceState(requests.get(i));
+                        sources.printSourcesState();
+                        devices.printDevices();
+                        buffer.printState();
+                        buffer.put(requests.get(i));
                     }
                 }
             }
-//            } else {
-                if (devices.isDeviceIdle()) {
-                    Device device1 = devices.put(requests.get(i));
-                    calendar.addItem(device1);
-                    requests.get(i).printRequest();
-                } else {
-                    if (!buffer.put(requests.get(i))) {
-                        System.out.println("Отказ " + requests.get(i).getSourceId() + "    " + requests.get(i).getId());
-                    } else {
-                        requests.get(i).printRequest();
-                    }
-                }
-//            }
+            System.out.println("---------------------------------------------------");
         }
         for (int i = calendar.getIndex(); i < calendar.getSize(); ++i) {
+            if(stepByStep) {
+                try
+                {
+                    System.in.read();
+                }
+                catch(Exception e)
+                {}
+            }
             Device device = calendar.getDevice();
 
             calendar.incrementIndex();
+            System.out.println("Прибор освободился:");
             device.printDevice();
+            sources.printSourcesState();
+            devices.printDevices();
 //                    --i;
             if (!buffer.getIsEmpty()) {
                 Request request = buffer.take();
@@ -71,6 +116,7 @@ public class MyProcess {
                 devices.put(request);
                 calendar.addItem(device);
             }
+            System.out.println("---------------------------------------------------");
         }
     }
 
