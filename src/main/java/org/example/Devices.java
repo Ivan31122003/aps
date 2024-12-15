@@ -59,4 +59,13 @@ public class Devices {
             System.out.println("   " + device.getId() + "      " + (!device.getIsIdle() ? device.getReleaseTime() : "---") + "     " + device.getIsIdle() + "            " + device.getProccecedRequsets() + "                " + (device.getSourceId() != null ? device.getSourceId() : "-") + " " + (device.getRequestId() != null ? device.getRequestId() : "-"));
         }
     }
+
+    public void printAverageTimeOfWorkloadDevices(Double allTime) {
+        Double aggTime = 0d;
+        for (Device device : devices) {
+            aggTime += device.getIdleTime();
+        }
+        Double percentageOfWorkload = (Math.round((allTime - aggTime / devicesNumber) / allTime * 10000) / 100d);
+        System.out.println("Процент загруженности приборов: " + percentageOfWorkload + "%");
+    }
 }

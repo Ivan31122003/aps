@@ -6,11 +6,17 @@ public class Device {
     private Integer sourceId;
     private Integer requestId;
     private Boolean isIdle = true;
-    private Double releaseTime;
+    private Double releaseTime = 0d;
     private Integer proccecedRequsets = 0;
+    private Request request;
+    private Double idleTime = 0d;
 
     public Device() {
         this.id = idCounter++;
+    }
+
+    public Double getIdleTime() {
+        return idleTime;
     }
 
     public Boolean getIsIdle() {
@@ -34,7 +40,9 @@ public class Device {
     }
 
     public void serviceRequest(Request request) {
+        this.request = request;
         isIdle = false;
+        idleTime += request.getTime() - releaseTime;
         sourceId = request.getSourceId();
         requestId = request.getId();
         releaseTime = (double) Math.round((request.getTime() + request.getExecutingTime()) * 10000.0) / 10000.0;
@@ -52,6 +60,7 @@ public class Device {
     }
 
     public void printDevice() {
+        request.setEndTime(releaseTime);
         isIdle = true;
         ++proccecedRequsets;
         System.out.println("Прибор: " + id);

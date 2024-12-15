@@ -7,6 +7,7 @@ public class Calendar {
     private List<Device> devices;
     private MyProcess process;
     private Integer index;
+    private Double timeOfSystemWork = 0d;
 
     public Calendar() {
         devices = new ArrayList<>();
@@ -18,7 +19,12 @@ public class Calendar {
     }
 
     public Device getDevice() {
+        timeOfSystemWork = devices.get(index).getReleaseTime();
         return devices.get(index);
+    }
+
+    public Double getTimeOfSystemWork() {
+        return timeOfSystemWork;
     }
 
     public void incrementIndex() {

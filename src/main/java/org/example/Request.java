@@ -7,6 +7,8 @@ public class Request {
     private Double time;
     private final Source source;
     private Boolean isRejected = false;
+    private final Double startTime;
+    private Double endTime;
 
     public Request(Integer sourceId, Integer requestId, Double executingTime, Double time, Source source) {
         this.sourceId = sourceId;
@@ -14,6 +16,15 @@ public class Request {
         this.executingTime = executingTime;
         this.time = time;
         this.source = source;
+        this.startTime = time;
+    }
+
+    public void setEndTime(Double endTime) {
+        this.endTime = endTime;
+    }
+
+    public Double getTimeInSystem() {
+        return endTime - startTime;
     }
 
     public Integer getSourceId() {
@@ -42,8 +53,8 @@ public class Request {
         System.out.println("Источник: " + sourceId);
         System.out.println("Заявка: " + id);
         System.out.println("Время: " + time);
-        System.out.println("Свободный прибор: " + isDeviceIdle);
-        System.out.println("Место в буфере: " + isExistsPlaceInBuffer);
+        System.out.println("Свободный прибор: " + (isDeviceIdle ? "Есть" : "Нет"));
+        System.out.println("Место в буфере: " + (isExistsPlaceInBuffer ? "Есть" : "Нет"));
     }
 
     public Boolean getIsRejected() {

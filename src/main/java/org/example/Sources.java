@@ -46,4 +46,30 @@ public class Sources {
             System.out.println("    " + source.getId() + "      " + (source.getCurrentTime() != null ? source.getCurrentTime() : "---") + "        " + source.getRequestsCounter() + "           " + source.getRejectedRequestsCounter() + "           " + (source.getCurrentRequesttId() != null ? source.getCurrentRequesttId() : "---"));
         }
     }
+
+    public void printPercentageOfProcessedRequests() {
+        Integer rejectedRequests = 0;
+        for (Source source : sources) {
+            rejectedRequests += source.getRejectedRequestsCounter();
+        }
+        System.out.println(rejectedRequests);
+        System.out.println(requestsNumber);
+        double percent = Math.round((1d - (double) rejectedRequests / requestsNumber) * 10000d) / 100d;
+        System.out.println("Процент обработанных заявок: " + percent + "%");
+    }
+
+    public void printAverageTimeOfRequestInSystem() {
+        Integer requestsCounter = 0;
+        Double aggRequestsTimeInSystem = 0d;
+        for (Source source : sources) {
+            for (Request request : source.getRequests()) {
+                if (!request.getIsRejected()) {
+                    ++requestsCounter;
+                    aggRequestsTimeInSystem += request.getTimeInSystem();
+                }
+            }
+        }
+        Double averageTime = Math.round(aggRequestsTimeInSystem / requestsCounter * 1000d) / 1000d;
+        System.out.println("Среднее время нахождения заявки в системе: " + averageTime);
+    }
 }

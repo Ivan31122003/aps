@@ -105,7 +105,7 @@ public class MyProcess {
             Device device = calendar.getDevice();
 
             calendar.incrementIndex();
-            System.out.println("Прибор освободился:");
+            System.out.println("Освободился прибор:");
             device.printDevice();
             sources.printSourcesState();
             devices.printDevices();
@@ -118,6 +118,9 @@ public class MyProcess {
             }
             System.out.println("---------------------------------------------------");
         }
+        sources.printPercentageOfProcessedRequests();
+        sources.printAverageTimeOfRequestInSystem();
+        devices.printAverageTimeOfWorkloadDevices(calendar.getTimeOfSystemWork());
     }
 
     public void printInfoSources() {
