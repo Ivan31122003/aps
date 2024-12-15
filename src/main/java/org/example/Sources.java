@@ -26,4 +26,24 @@ public class Sources {
         }
         return requestsList;
     }
+
+    public void setSourceState(Request request) {
+        for (Source source : sources) {
+            if (source.getId().equals(request.getSourceId())) {
+                if(request.getIsRejected()) {
+                    source.incrementRejectedRequestsCounter();
+                }
+                source.incrementRequestCounter();
+                source.setCurrentRequestId(request.getId());
+                source.setCurrentTime(request.getTime());
+            }
+        }
+    }
+
+    public void printSourcesState() {
+        System.out.println("Источник   Время    Заявки   Отклоненные   Текущая");
+        for (Source source : sources) {
+            System.out.println("    " + source.getId() + "      " + (source.getCurrentTime() != null ? source.getCurrentTime() : "---") + "        " + source.getRequestsCounter() + "           " + source.getRejectedRequestsCounter() + "           " + (source.getCurrentRequesttId() != null ? source.getCurrentRequesttId() : "---"));
+        }
+    }
 }
