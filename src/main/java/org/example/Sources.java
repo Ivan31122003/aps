@@ -52,8 +52,6 @@ public class Sources {
         for (Source source : sources) {
             rejectedRequests += source.getRejectedRequestsCounter();
         }
-        System.out.println(rejectedRequests);
-        System.out.println(requestsNumber);
         double percent = Math.round((1d - (double) rejectedRequests / requestsNumber) * 10000d) / 100d;
         System.out.println("Процент обработанных заявок: " + percent + "%");
     }
