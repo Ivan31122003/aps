@@ -64,7 +64,7 @@ public class MyProcess {
                 if (devices.isDeviceIdle()) {
                     System.out.println("Поступила заявка:");
                     requests.get(i).printRequest(true, buffer.getIsEmpty());
-                    sources.setSourceState(requests.get(i));
+                    sources.setSourceState(requests.get(i), i + sources.getSourcesNumber() < requestsNumber - 1 ? requests.get(i + sources.getSourcesNumber()).getTime() : -1d);
                     sources.printSourcesState();
                     devices.printDevices();
                     Device device1 = devices.put(requests.get(i));
@@ -76,14 +76,14 @@ public class MyProcess {
                         System.out.println("Поступила заявка (отказ):");
                         requests.get(i).setIsRejected();
                         requests.get(i).printRequest(false, isExistsPlaceInBuffer);
-                        sources.setSourceState(requests.get(i));
+                        sources.setSourceState(requests.get(i), i + sources.getSourcesNumber() < requestsNumber ? requests.get(i + sources.getSourcesNumber()).getTime() : -1d);
                         sources.printSourcesState();
                         devices.printDevices();
                         buffer.printState();
                     } else {
                         System.out.println("Поступила заявка:");
                         requests.get(i).printRequest(false, isExistsPlaceInBuffer);
-                        sources.setSourceState(requests.get(i));
+                        sources.setSourceState(requests.get(i), i + sources.getSourcesNumber() < requestsNumber ? requests.get(i + sources.getSourcesNumber()).getTime() : -1d);
                         sources.printSourcesState();
                         devices.printDevices();
                         buffer.printState();

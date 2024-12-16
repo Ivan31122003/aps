@@ -6,13 +6,19 @@ import java.util.List;
 public class Sources {
     private List<Source> sources;
     private Integer requestsNumber;
+    private final Integer sourcesNumber;
 
     public Sources(Integer sourcesNumber, Double startDelay, Double interval, Integer requestsNumber, Double requestTime) {
         sources = new ArrayList<>();
         this.requestsNumber = requestsNumber;
+        this.sourcesNumber = sourcesNumber;
         for (int i = 0; i < sourcesNumber; ++i) {
             sources.add(new Source(startDelay * (i + 1), interval, requestsNumber / sourcesNumber, requestTime));
         }
+    }
+
+    public Integer getSourcesNumber() {
+        return sourcesNumber;
     }
 
     public List<Source> getSources() {
@@ -27,7 +33,7 @@ public class Sources {
         return requestsList;
     }
 
-    public void setSourceState(Request request) {
+    public void setSourceState(Request request, Double time) {
         for (Source source : sources) {
             if (source.getId().equals(request.getSourceId())) {
                 if(request.getIsRejected()) {
@@ -35,7 +41,7 @@ public class Sources {
                 }
                 source.incrementRequestCounter();
                 source.setCurrentRequestId(request.getId());
-                source.setCurrentTime(request.getTime());
+                source.setCurrentTime(time);
             }
         }
     }
